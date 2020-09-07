@@ -33,7 +33,7 @@ object GraphVizWrapper {
     private const val WHERE_DOT = "where dot.exe"
 
     fun detectDotPath(): String? {
-        val options = if (java.lang.System.getProperty("os.name").contains("Windows"))
+        val options = if (System.getProperty("os.name").contains("Windows"))
             arrayOf(WHERE_DOT, WHICH_DOT)
         else
             arrayOf(WHICH_DOT, WHERE_DOT)
