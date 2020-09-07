@@ -22,14 +22,16 @@ package nl.knaw.huygens.graphviz
 
 import nl.knaw.huygens.graphviz.GraphVizWrapper.detectDotPath
 import java.io.*
+import java.lang.RuntimeException
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionException
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-class DotEngine(private val dotPath: String = detectDotPath() ?: error("dot or dot.exe not found")) {
+class DotEngine(private val dotPath: String = detectDotPath() ?: "") {
     val dotVersion: String by lazy { readDotVersion() }
+    val hasDot: Boolean by lazy { dotPath.isNotEmpty() }
 
     private val processThreads = Executors.newCachedThreadPool()
 
@@ -40,6 +42,7 @@ class DotEngine(private val dotPath: String = detectDotPath() ?: error("dot or d
     }
 
     fun renderAs(format: String, dot: String, outputStream: OutputStream) {
+        checkForDotExecutable()
         val dotProc = ProcessBuilder(dotPath, "-T$format").start()
         val errors = StringWriter()
         CompletableFuture.allOf(
@@ -48,6 +51,12 @@ class DotEngine(private val dotPath: String = detectDotPath() ?: error("dot or d
                 processInputStream(dotProc, outputStream),
                 waitForCompletion(dotProc, errors))
                 .get()
+    }
+
+    private fun checkForDotExecutable() {
+        if (!hasDot) {
+            throw RuntimeException("GraphViz dot binary not found.")
+        }
     }
 
     private fun waitForCompletion(dotProc: Process, errors: StringWriter): CompletableFuture<Void> =
@@ -111,6 +120,7 @@ class DotEngine(private val dotPath: String = detectDotPath() ?: error("dot or d
                     processThreads)
 
     private fun readDotVersion(): String {
+        checkForDotExecutable()
         val dotProc = ProcessBuilder(dotPath, "-V").start()
         val stdErr = StringWriter()
         val outputStream = ByteArrayOutputStream()

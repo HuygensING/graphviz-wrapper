@@ -29,9 +29,16 @@ import java.util.logging.Logger
 
 object GraphVizWrapper {
     private val LOG = Logger.getLogger(GraphVizWrapper::class.java.name)
+    private const val WHICH_DOT = "which dot"
+    private const val WHERE_DOT = "where dot.exe"
 
     fun detectDotPath(): String? {
-        for (detectionCommand in arrayOf("where dot.exe", "which dot")) {
+        val options = if (java.lang.System.getProperty("os.name").contains("Windows"))
+            arrayOf(WHERE_DOT, WHICH_DOT)
+        else
+            arrayOf(WHICH_DOT, WHERE_DOT)
+
+        for (detectionCommand in options) {
             try {
                 val process = Runtime.getRuntime().exec(detectionCommand)
                 val inputStreamReader = InputStreamReader(process.inputStream, Charset.defaultCharset())

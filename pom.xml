@@ -8,7 +8,7 @@
     <groupId>nl.knaw.huygens</groupId>
     <artifactId>graphviz-wrapper</artifactId>
     <name>GraphVizWrapper</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <inceptionYear>2020</inceptionYear>
 
@@ -24,7 +24,7 @@
         <!-- Timestamp settings for use in properties file -->
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
 
-        <assertj.version>3.16.1</assertj.version>
+        <assertj.version>3.17.2</assertj.version>
         <build-helper-maven.version>3.2.0</build-helper-maven.version>
         <buildnumber-maven.version>1.4</buildnumber-maven.version>
         <graphviz-java.version>0.3.0</graphviz-java.version>
@@ -38,7 +38,7 @@
         <maven-shade.version>3.2.1</maven-shade.version>
         <maven-source.version>3.2.1</maven-source.version>
         <maven-surefire.version>3.0.0-M5</maven-surefire.version>
-        <mockito.version>3.3.3</mockito.version>
+        <mockito.version>3.5.10</mockito.version>
         <servlet-api.version>4.0.0-b01</servlet-api.version>
         <slf4j-api.version>1.7.25</slf4j-api.version>
         <wagon-ssh.version>3.3.3</wagon-ssh.version>

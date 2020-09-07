@@ -25,7 +25,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.platform.commons.logging.LoggerFactory
 import java.io.ByteArrayOutputStream
-import kotlin.test.assertNotNull
 
 class GraphVizWrapperTest {
 
@@ -33,33 +32,47 @@ class GraphVizWrapperTest {
 
     private val simpleDot = "graph{x--y;y--z;z--x}"
 
-    @Test
-    fun test_detect_dot_path() {
-        val dotPath = detectDotPath()
-        log.info { "dotPath = $dotPath" }
-        assertNotNull(dotPath)
-        println(dotPath)
-    }
+    private val dotEngine = DotEngine()
+
+    private val dotExecutableFound = detectDotPath() != null
 
     @Test
     fun test_DotEngine_with_stream() {
-        val outputStream = ByteArrayOutputStream()
-        DotEngine().renderAs("svg", simpleDot, outputStream)
-        val rendered = outputStream.toString("UTF-8")
-        assertThat(rendered).contains("<svg", "</svg>")
+        when_dot_executable_is_present {
+            val outputStream = ByteArrayOutputStream()
+            dotEngine.renderAs("svg", simpleDot, outputStream)
+            val rendered = outputStream.toString("UTF-8")
+            assertThat(rendered).contains("<svg", "</svg>")
+        }
     }
 
     @Test
     fun test_renderAs_as_string() {
-        val rendered = DotEngine().renderAs("svg", simpleDot)
-        assertThat(rendered).contains("<svg", "</svg>")
+        when_dot_executable_is_present {
+            val rendered = dotEngine.renderAs("svg", simpleDot)
+            assertThat(rendered).contains("<svg", "</svg>")
+        }
     }
 
     @Test
     fun test_dot_version() {
-        val version = DotEngine().dotVersion
-        log.info { "version = $version" }
-        assertThat(version).isNotEmpty
+        when_dot_executable_is_present {
+            val version = dotEngine.dotVersion
+            log.info { "version = $version" }
+            assertThat(version).isNotEmpty
+        }
     }
+
+    @Test
+    fun test_has_dot() {
+        assertThat(dotEngine.hasDot).isEqualTo(dotExecutableFound)
+    }
+
+    private fun when_dot_executable_is_present(func: () -> Unit) =
+            if (dotExecutableFound) {
+                func()
+            } else {
+                log.info { "dot executable not found, skipping test" }
+            }
 
 }
