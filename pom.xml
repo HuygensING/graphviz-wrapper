@@ -29,7 +29,7 @@
         <buildnumber-maven.version>1.4</buildnumber-maven.version>
         <graphviz-java.version>0.3.0</graphviz-java.version>
         <junit-jupiter.version>5.7.0-M1</junit-jupiter.version>
-        <kotlin.version>1.5.0</kotlin.version>
+        <kotlin.version>1.5.10</kotlin.version>
         <maven-compiler.version>3.8.1</maven-compiler.version>
         <maven-jar.version>3.1.2</maven-jar.version>
         <maven-javadoc.version>3.2.0</maven-javadoc.version>
